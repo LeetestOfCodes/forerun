@@ -3,11 +3,11 @@ A Haskell workflow booster for build dependencies in cabal projects.
 
 # Are you tired of needing to look up the latest version number for a haskell hackage package, before needing to manually plug it into your cabal project file.
 
-#Every
+# Every
 
-#Single
+# Single
 
-#Time?
+# Time?
 
 # Well...
 
