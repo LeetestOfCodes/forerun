@@ -1,0 +1,48 @@
+#!/opt/homebrew/opt/python@3.10/libexec/bin/python
+
+import requests
+from bs4 import BeautifulSoup
+import os
+
+# read user input of package name 
+pack = input("Enter package name: ")
+url = "https://hackage.haskell.org/package/" + pack
+html_text = requests.get(url).text
+soup = BeautifulSoup(html_text, "html.parser")
+
+# show only the first <strong> tag (its content)
+# don't print the tag parts
+print(soup.strong.string)
+
+
+# if current directory is a cabal project's root directory 
+# then append: packagename ^>= version to the build_depends section of the file
+
+# get name of current directory (without the slash at the end)
+cwd = os.getcwd().split("/")[-1]
+
+filename = cwd + ".cabal"
+
+f = open(filename, "r")
+lines = f.readlines()
+f.close()
+
+# find the line number of the build-depends section
+# make sure the line contains the word "build-depends"
+i = 0
+for line in lines:
+    if "build-depends" in line:
+        break
+    i += 1
+
+# append the package name and version to the build_depends section
+lines[i] = lines[i].rstrip() + ", " + pack + " ^>=" + soup.strong.string 
+
+# write the file 
+f = open(filename, "w")
+f.writelines(lines) 
+f.close() 
+
+
+
+
